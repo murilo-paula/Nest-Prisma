@@ -12,7 +12,7 @@ export class TaskController {
     }
     
     @Post('criar') 
-    create(@Body() x: any) {
-        return  this.taskService.create(x.title);
+    create(@Body() body: any) {
+        return  this.taskService.create(body);
     }
 }
