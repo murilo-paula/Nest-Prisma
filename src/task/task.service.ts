@@ -20,7 +20,14 @@ export class TaskService {
         return this.tasks;
     }
 
-    create() {
-        return 'meu nome e murilo'
+    create(title: string): Task {
+        const newTask: Task = {
+            id: this.tasks.length + 1,
+            title,
+            done: false,
+        }
+
+        this.tasks.push(newTask);
+        return newTask;
     }
 }

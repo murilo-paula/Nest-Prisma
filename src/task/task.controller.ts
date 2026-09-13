@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TaskService, Task } from './task.service';
 
 
@@ -11,8 +11,8 @@ export class TaskController {
         return this.taskService.findAll();
     }
     
-    @Post('pega') 
-    create() {
-        return  this.taskService.create();
+    @Post('criar') 
+    create(@Body() x: any) {
+        return  this.taskService.create(x.title);
     }
 }
