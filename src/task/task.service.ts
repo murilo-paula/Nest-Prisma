@@ -1,33 +1,49 @@
 import { Injectable } from '@nestjs/common';
 
 export interface Task {
+    name: string;
     id: number;
     title: string;
     done: boolean;
+    active: boolean;
 }
 
 
 @Injectable()
 export class TaskService {
     private tasks: Task[] = [
-        {id: 1, title: 'estudar nestjs', done: false},
-        {id: 2, title: 'estudar prisma', done: false},
-        {id: 3, title: 'estudar react', done: false},
-        {id: 4, title: 'estudar tailwind', done: true},
+        {id: 1, name: 'murilo', title: 'estudar nestjs', done: false, active: true},
+        {id: 2, name: 'mateus', title: 'estudar prisma', done: false, active: true},
+        {id: 3, name: 'daya', title: 'estudar react', done: false, active: true},
+        {id: 4, name: 'ana', title: 'estudar tailwind', done: true, active: true},
     ];
+
+    findOne(id: string) {
+        return this.tasks.find(task => task.id === Number(id));
+    }
 
     findAll(): Task[] {
         return this.tasks;
     }
 
-    create(title: string): Task {
+    create(body: any): Task {
         const newTask: Task = {
+            name: body.name,
             id: this.tasks.length + 1,
-            title,
+            title: body.title,
             done: false,
+            active: true
         }
 
         this.tasks.push(newTask);
         return newTask;
+    }
+
+    delete(id: string) {
+        const newTask = this.tasks.map(i => i.id === Number(id)? {...i, active: false} : i);
+        const deletedTask = newTask.find(task => task.id === Number(id));
+
+        this.tasks = newTask;
+        return deletedTask
     }
 }

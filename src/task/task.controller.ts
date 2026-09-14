@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TaskService, Task } from './task.service';
 
 
@@ -6,13 +6,25 @@ import { TaskService, Task } from './task.service';
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
-    @Get()
+
+    @Get('all')
     findAll() {
         return this.taskService.findAll();
     }
+
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.taskService.findOne(id);
+    }
+
     
-    @Post('criar') 
-    create(@Body() x: any) {
-        return  this.taskService.create(x.title);
+    @Post() 
+    create(@Body() body: any) {
+        return  this.taskService.create(body);
+    }
+
+    @Delete(':idDeletar')
+    delete(@Param('idDeletar') id: string) {
+        return this.taskService.delete(id)
     }
 }
