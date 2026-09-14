@@ -17,6 +17,10 @@ export class TaskService {
         {id: 4, name: 'ana', title: 'estudar tailwind', done: true},
     ];
 
+    findOne(id: string) {
+        return this.tasks.find(task => task.id === Number(id));
+    }
+
     findAll(): Task[] {
         return this.tasks;
     }
