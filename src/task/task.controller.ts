@@ -19,8 +19,8 @@ export class TaskController {
 
     
     @Post() 
-    create(@Body() body: any) {
-        return  this.taskService.create(body);
+    async create(@Body() body: any) {
+        return await this.taskService.create(body);
     }
 
     @Delete(':idDeletar')
