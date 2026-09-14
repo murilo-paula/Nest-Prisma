@@ -13,7 +13,7 @@ export interface Task {
 export class TaskService {
     private tasks: Task[] = [
         {id: 1, name: 'murilo', title: 'estudar nestjs', done: false, active: true},
-        {id: 2, name: 'maria', title: 'estudar prisma', done: false, active: true},
+        {id: 2, name: 'maria', title: 'estudar prisma', done: false, active: false},
         {id: 3, name: 'joão', title: 'estudar react', done: false, active: true},
         {id: 4, name: 'mateus', title: 'estudar tailwind', done: true, active: true},
     ];
@@ -22,8 +22,9 @@ export class TaskService {
         return this.tasks.find(task => task.id === Number(id));
     }
 
-    findAll(): Task[] {
-        return this.tasks;
+    findAll() {
+        const newTasks = this.tasks.map(i => i.active === true ? null : i);
+        return newTasks;
     }
 
     create(body: any): Task {
