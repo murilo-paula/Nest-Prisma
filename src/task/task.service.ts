@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
 
 export interface Task {
     name: string;
     id: number;
+    password: string;
     title: string;
     done: boolean;
     active: boolean;
@@ -12,25 +15,30 @@ export interface Task {
 @Injectable()
 export class TaskService {
     private tasks: Task[] = [
-        {id: 1, name: 'murilo', title: 'estudar nestjs', done: false, active: true},
-        {id: 2, name: 'maria', title: 'estudar prisma', done: false, active: true},
-        {id: 3, name: 'joão', title: 'estudar react', done: false, active: true},
-        {id: 4, name: 'mateus', title: 'estudar tailwind', done: true, active: true},
+        {id: 1, name: 'murilo', password: '3282382849', title: 'estudar nestjs', done: false, active: true},
+        {id: 2, name: 'maria', password: '34534537474', title: 'estudar prisma', done: false, active: true},
+        {id: 3, name: 'joão', password: '63623625245', title: 'estudar react', done: false, active: true},
+        {id: 4, name: 'mateus', password: '1234', title: 'estudar tailwind', done: true, active: true},
     ];
 
     findOne(id: string) {
         return this.tasks.find(task => task.id === Number(id));
     }
 
-    findAll(): Task[] {
-        return this.tasks;
+    findAll() {
+        const newTasks = this.tasks.map(i => i.active === false ? null : i);
+        return newTasks;
     }
 
-    create(body: any): Task {
+    async create(body: any): Promise<Task> {
+
+        const hastpassword = await bcrypt.hash(body.password, 10)
+
         const newTask: Task = {
             name: body.name,
             id: this.tasks.length + 1,
             title: body.title,
+            password: hastpassword,
             done: false,
             active: true
         }
