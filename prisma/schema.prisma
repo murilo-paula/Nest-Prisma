@@ -1,31 +1,33 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
   provider = "mysql"
 }
 
-
 model Users {
-  id Int @id @default(autoincrement())
-  name String
-  email String @unique
-  role Role @default(USER)
-
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  role      Role     @default(USER)
   create_at DateTime @default(now())
-  
+
   @@map("users")
+}
+
+model dbtasks {
+  id       Int     @id @default(autoincrement())
+  name     String
+  title    String
+  password String
+  done     Boolean @default(false)
+  active   Boolean @default(true)
 }
 
 enum Role {
   USER
   ADMIN
 }
-

@@ -1,58 +1,35 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { createTaskDto } from './dtos/create-task.dto';
-
-
-export interface Task {
-    name: string;
-    id: number;
-    password: string;
-    title: string;
-    done: boolean;
-    active: boolean;
-}
-
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class TaskService {
-    private tasks: Task[] = [
-        {id: 1, name: 'murilo', password: '3282382849', title: 'estudar nestjs', done: false, active: true},
-        {id: 2, name: 'maria', password: '34534537474', title: 'estudar prisma', done: false, active: true},
-        {id: 3, name: 'joão', password: '63623625245', title: 'estudar react', done: false, active: true},
-        {id: 4, name: 'mateus', password: '1234', title: 'estudar tailwind', done: true, active: true},
-    ];
+    constructor(private prisma: PrismaService) { }
 
-    findOne(id: string) {
-        return this.tasks.find(task => task.id === Number(id));
+    findOne(id: number) {
+        return this.prisma.dbtasks.findUnique({ where: { id } })
     }
 
-    findAll() {
-        const newTasks = this.tasks.map(i => i.active === false ? null : i);
-        return newTasks;
-    }
+    // findAll() {
+    //     const newTasks = this.tasks.map(i => i.active === false ? null : i);
+    //     return newTasks;
+    // }
 
-    async create(body: createTaskDto): Promise<Task> {
+    async create(body: createTaskDto) {
 
         const hastpassword = await bcrypt.hash(body.password, 10)
 
-        const newTask: Task = {
-            name: body.name,
-            id: this.tasks.length + 1,
-            title: body.title,
-            password: hastpassword,
-            done: false,
-            active: true
-        }
+        const newTask = this.prisma.dbtasks.create({ data: {...body, password: hastpassword} })
 
-        this.tasks.push(newTask);
         return newTask;
     }
 
-    delete(id: string) {
-        const newTask = this.tasks.map(i => i.id === Number(id)? {...i, active: false} : i);
-        const deletedTask = newTask.find(task => task.id === Number(id));
+    // delete(id: string) {
+    //     const newTask = this.tasks.map(i => i.id === Number(id) ? { ...i, active: false } : i);
+    //     const deletedTask = newTask.find(task => task.id === Number(id));
 
-        this.tasks = newTask;
-        return deletedTask
-    }
+    //     this.tasks = newTask;
+    //     return deletedTask
+    // }
 }
