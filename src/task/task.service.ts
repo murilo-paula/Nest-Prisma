@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { createTaskDto } from './dtos/create-task.dto';
 
 
 export interface Task {
@@ -30,7 +31,7 @@ export class TaskService {
         return newTasks;
     }
 
-    async create(body: any): Promise<Task> {
+    async create(body: createTaskDto): Promise<Task> {
 
         const hastpassword = await bcrypt.hash(body.password, 10)
 
